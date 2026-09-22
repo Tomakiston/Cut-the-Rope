@@ -1,0 +1,60 @@
+class Rope {
+    constructor(nLink, pointA) {
+        const group = Matter.Body.nextGroup(true);
+        const rects = Matter.Composities.stack(
+            pointA.x,
+            pointA.y,
+            nLink,
+            1,
+            5,
+            5,
+            function(x,y) {
+                return Matter.Bodies.rectangle(
+                    x,
+                    y,
+                    40,
+                    5,
+                    {
+                        collisionFilter: {group: group},
+                        frictionAir: 0.05
+                    }
+                );
+            }
+        );
+
+        this.body = Matter.Composities.chain(
+            rects,
+            0.5,
+            0,
+            -0.5,
+            0,
+            {
+                stiffness: 0.9,
+                length: 0
+            }
+        );
+
+        Matter.World.add(world, this.body);
+
+        Matter.Composite.add(
+            this.body,
+            Matter.Constraint.create({
+                pointA: pointA,
+                bodyB: rects.bodies[0],
+                pointB: {x:0, y:0},
+                stiffness: 1,
+                damping: 0.02
+            })
+        )
+    }
+
+    break() {
+        if(this.body.bodies.length > 0) {
+            Matter.Composite.remove(
+                this.body,
+                this.body.bodies[this.body.bodies.length - 1],
+                
+            );
+        }
+    }
+}

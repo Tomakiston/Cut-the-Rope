@@ -14,7 +14,7 @@ let candyImg;
 let supportImg;
 
 //On Nom
-let omNom = {x:440, y:470, size:160};
+let omNom = {x:514, y:570, size:160};
 let omNomFrames = [];
 let currentFrame = 0;
 let frameDelay = 15;
@@ -55,7 +55,7 @@ function draw() {
     Engine.update(engine);
 
     imageMode(CENTER);
-    image(supportImg, 440,520, 160,160);
+    image(supportImg, 514,620, 160,160);
 
     drawOmNom();
 }
