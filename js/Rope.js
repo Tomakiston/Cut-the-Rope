@@ -1,7 +1,7 @@
 class Rope {
     constructor(nLink, pointA) {
         const group = Matter.Body.nextGroup(true);
-        const rects = Matter.Composities.stack(
+        const rects = Matter.Composites.stack(
             pointA.x,
             pointA.y,
             nLink,
@@ -22,7 +22,7 @@ class Rope {
             }
         );
 
-        this.body = Matter.Composities.chain(
+        this.body = Matter.Composites.chain(
             rects,
             0.5,
             0,
@@ -52,9 +52,22 @@ class Rope {
         if(this.body.bodies.length > 0) {
             Matter.Composite.remove(
                 this.body,
-                this.body.bodies[this.body.bodies.length - 1],
-                
+                this.body.bodies[this.body.bodies.length - 1]
             );
         }
+    }
+
+    display() {
+        stroke("#885A2B");
+        strokeWeight(4);
+
+        for(let i = 0; i < this.body.bodies.length - 1; i++) {
+            let bodyA = this.body.bodies[i];
+            let bodyB = this.body.bodies[i + 1];
+
+            line(bodyA.position.x,bodyA.position.y, bodyB.position.x,bodyB.position.y);
+        }
+
+        noStroke();
     }
 }

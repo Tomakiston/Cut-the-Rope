@@ -10,14 +10,27 @@ let world;
 let canvas;
 
 let backgroundImg;
-let candyImg;
 let supportImg;
 
 //On Nom
-let omNom = {x:514, y:570, size:160};
+let omNom = {};
 let omNomFrames = [];
 let currentFrame = 0;
 let frameDelay = 15;
+
+let pinImg;
+
+let candy;
+let candyImg;
+let candyCon;
+let candyCons = [];
+
+let starImg;
+let starDisappearFrames = [];
+let starDisappearFrameDelay = 5;
+let star = [];
+let starFilledImg;
+let starEmptyImg;
 
 function preload() {
     backgroundImg = loadImage("images/bg-box.jpeg");
@@ -35,6 +48,8 @@ function preload() {
     omNomFrames.push(loadImage("images/om-nom4.png"));
     omNomFrames.push(loadImage("images/om-nom5.png"));
     omNomFrames.push(loadImage("images/om-nom6.png"));
+
+    pinImg = loadImage("images/pino-parede.png");
 }
 
 function setup() {
@@ -45,6 +60,8 @@ function setup() {
     engine.velocityIterations = 10;
     engine.constraintIterations = 8;
     world = engine.world;
+
+    loadLevel1();
 }
 
 function draw() {
@@ -54,20 +71,10 @@ function draw() {
     image(backgroundImg, 0,0, width,height);
     Engine.update(engine);
 
-    imageMode(CENTER);
-    image(supportImg, 514,620, 160,160);
-
     drawOmNom();
+    
 }
 
-function drawOmNom() {
-    if(frameCount % frameDelay === 0) {
-        currentFrame++;
-
-        if(currentFrame >= omNomFrames.length) {
-            currentFrame = 0;
-        }
-    }
-
-    image(omNomFrames[currentFrame], omNom.x,omNom.y, omNom.size,omNom.size);
+function mousePressed() {
+    
 }
