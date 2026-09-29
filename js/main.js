@@ -125,9 +125,9 @@ function preload() {
     supportImg = loadImage("images/support1.png");
 
     starImg = loadImage("images/star-cut-the-rope.png");
-    starDissapearFrames.push(loadImage("images/obj_star_disappear_1"));
-    starDissapearFrames.push(loadImage("images/obj_star_disappear_2"));
-    starDissapearFrames.push(loadImage("images/obj_star_disappear_3"));
+    starDisappearFrames.push(loadImage("images/obj_star_disappear_1.png"));
+    starDisappearFrames.push(loadImage("images/obj_star_disappear_2.png"));
+    starDisappearFrames.push(loadImage("images/obj_star_disappear_3.png"));
     starFilledImg = loadImage("images/estrela-preenchida-cut-the-rope.png");
     starEmptyImg = loadImage("images/estrela-vazada-cut-the-rope.png");
 
