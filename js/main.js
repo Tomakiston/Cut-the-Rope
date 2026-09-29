@@ -71,10 +71,26 @@ function draw() {
     image(backgroundImg, 0,0, width,height);
     Engine.update(engine);
 
+    rope.display();
+    drawPins();
+    drawCandy();
+
     drawOmNom();
-    
 }
 
 function mousePressed() {
     
+}
+
+function drawPins() {
+    imageMode(CENTER);
+
+    for(let pin of pins) {
+        image(pinImg, pin.x,pin.y, pin.size,pin.size);
+    }
+}
+
+function drawCandy() {
+    imageMode(CENTER);
+    image(candyImg, candy.position.x,candy.position.y, 50,50);
 }
