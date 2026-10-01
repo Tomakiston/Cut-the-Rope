@@ -187,10 +187,21 @@ function setup() {
     canvas = createCanvas(1028, 680);
 
     engine = Engine.create();
-    engine.positionIterations = 12;
-    engine.velocityIterations = 10;
-    engine.constraintIterations = 8;
     world = engine.world;
+
+    restartButton.x = width - 110;
+    pauseButton.x = width - 45;
+
+    levels[0].img = level1Img;
+    levels[1].img = levelBlockedImg;
+    levels[2].img = levelBlockedImg;
+
+    restartEndButton = {x:width/2 - 80, y:430, size:70};
+    homeButton = {x:width/2, y:430, size:70};
+    nextButton = {x:width/2 + 80, y:430, size:70};
+
+    finalMenuButton = {x:240, y:655, width:245, height:120};
+    finalRetryButton = {x:795, y:655, width:245, height:120};
 
     loadLevel1();
 }
