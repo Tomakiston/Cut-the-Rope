@@ -47,6 +47,7 @@ let cuts = [];
 
 let restartImg;
 let pauseImg;
+let playImg;
 let nextImg;
 let homeImg;
 let menuBgImg;
@@ -144,6 +145,42 @@ function preload() {
     omNomFrames.push(loadImage("images/om-nom6.png"));
 
     pinImg = loadImage("images/pino-parede.png");
+
+    bgSoundImg = loadImage("images/bg-sound.png");
+    speakerImg = loadImage("images/speaker.png");
+    pauseImg = loadImage("images/pause.png");
+    restartImg = loadImage("images/restart.png");
+    playImg = loadImage("images/play.png");
+    homeImg = loadImage("images/home.png");
+    nextImg = loadImage("images/next.png");
+
+    menuBgImg = loadImage("images/bg-lvl.png");
+    level1Img = loadImage("images/lvl-1.png");
+    level2Img = loadImage("images/lvl-2.png");
+    level3Img = loadImage("images/lvl-3.png");
+    levelBlockedImgImg = loadImage("images/lvl-blocked.png");
+
+    bgVictoryImg = loadImage("images/bg-vitoria.png");
+    btnMenuImg = loadImage("images/btn-menu.png");
+    btnTryAgainImg = loadImage("images/btn-tentar-de-novo.png");
+
+    blowerImg = loadImage("images/soprador1.png");
+    blowerFrames.push(loadImage("images/soprador1.png"));
+    blowerFrames.push(loadImage("images/soprador2.png"));
+    blowerFrames.push(loadImage("images/soprador3.png"));
+    blowerFrames.push(loadImage("images/soprador4.png"));
+    blowerFrames.push(loadImage("images/soprador5.png"));
+    blowerFrames.push(loadImage("images/soprador6.png"));
+
+    bubbleImg = loadImage("images/bubble.png");
+
+    gameMusic = loadSound("sound/game-music.mp3");
+    breakSound = loadSound("sound/candy_break.wav");
+    ropeSound = loadSound("sound/rope_get.wav");
+    star1Sound = loadSound("sound/star_1.wav");
+    star2Sound = loadSound("sound/star_2.wav");
+    star3Sound = loadSound("sound/star_3.wav");
+    winSound = loadSound("sound/win.wav");
 }
 
 function setup() {
