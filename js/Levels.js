@@ -40,4 +40,34 @@ function loadLevel1() {
     World.add(world, candy);
 
     candyCon = new Link(rope, candy);
+
+    stars = [];
+    stars.push({
+        x: 510,
+        y: 350,
+        collected: false,
+        angle: 0,
+        disappearing: false,
+        disappearFrame: 0
+    });
+    stars.push({
+        x: 510,
+        y: 450,
+        collected: false,
+        angle: 0,
+        disappearing: false,
+        disappearFrame: 0
+    });
+    stars.push({
+        x: 510,
+        y: 550,
+        collected: false,
+        angle: 0,
+        disappearing: false,
+        disappearFrame: 0
+    });
+
+    drawOmNom();
+
+    gameState = "playing";
 }

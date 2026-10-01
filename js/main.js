@@ -202,8 +202,6 @@ function setup() {
 
     finalMenuButton = {x:240, y:655, width:245, height:120};
     finalRetryButton = {x:795, y:655, width:245, height:120};
-
-    loadLevel1();
 }
 
 function draw() {
@@ -211,7 +209,15 @@ function draw() {
 
     imageMode(CORNER);
     image(backgroundImg, 0,0, width,height);
-    Engine.update(engine);
+
+    if(!paused) {
+        Engine.update(engine, deltaTime);
+    }
+
+    if(gameState === "menu") {
+        drawMenu();
+        return;
+    }
 
     rope.display();
     drawPins();
@@ -222,6 +228,16 @@ function draw() {
 
 function mousePressed() {
     
+}
+
+function drawMenu() {
+    imageMode(CORNER);
+    image(menuBgImg, 0,0, width,height);
+
+    imageMode(CENTER);
+    for(let level of levels) {
+        image(level.img, level.x, level.y, 180,180);
+    }
 }
 
 function drawPins() {
