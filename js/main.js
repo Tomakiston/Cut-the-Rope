@@ -219,15 +219,125 @@ function draw() {
         return;
     }
 
-    rope.display();
+    drawStars();
     drawPins();
-    drawCandy();
 
-    drawOmNom();
+    if(ground) {
+        ground.display();
+    }
+    if(rope) {
+        rope.display();
+    }
+
+    for(r of ropes) {
+        r.display();
+    }
+
+    drawCuts();
+
+    imageMode(CENTER);
+
+    if(gameState = "playing") {
+        if(currentLevel === 1) {
+            drawOnNom();
+        }
+        else if(currentLevel === 2) {
+            drawOnNom2();
+        }
+        else if(currentLevel === 3) {
+            drawOnNom3();
+        }
+    }
+
+    if(candy) {
+        drawCandy();
+    }
+
+    checkStars();
+    checkWin();
+    checkLose();
+
+    drawStarScore();
+    drawGameState();
+
+    if(candyCon && candyCon.link && candyCon.link.bodyA && candy) {
+        stroke(255);
+        line(candyCon.link.bodyA.position.x,candyCon.link.bodyA.position.y, candy.position.x,candy.position.y);
+    }
+    if(paused) {
+        fill(0,180);
+        rect(0,0, width,height);
+        
+        textAlign(CENTER);
+        fill(255);
+        textSize(60);
+        text("Pausado", width/2, height/2);
+        
+        textSize(22);
+        text("Clique no botão JOGAR para continuar.", width/2, height/2 + 50);
+    }
 }
 
 function mousePressed() {
     
+}
+
+function mouseDragged() {
+    if(paused) return;
+    if(gameState !== "playing") return;
+
+    let allRopes = [];
+
+    if(rope) {
+        allRopes.push(rope);
+    }
+
+    for(let r of ropes) {
+        allRopes.push(r);
+    }
+
+    for(let r of allRopes) {
+        for(let body of r.body.bodies) {
+            let d = dist(mouseX,mouseY, body.position.x,body.position.y);
+            if(d < 20) {
+                playEffect(ropeSound);
+
+                cuts.push({
+                    x1: pmouseX,
+                    y1: pmouseY,
+                    x2: mouseX,
+                    y2: mouseY,
+                    life: 12
+                });
+
+                r.break();
+
+                if(r == rope) {
+                    if(candyCon) {
+                        candyCon.detach();
+                        candyCon = null;
+                    }
+
+                    Composite.remove(world, r.body);
+                    rope = null;
+                } else {
+                    let index = ropes.indexOf(r);
+
+                    if(index !== -1) {
+                        if(candyCons[index]) {
+                            candyCons[index].detach();
+                            candyCons.splice(index, 1);
+                        }
+
+                        Composite.remove(world, r.body);
+                        ropes.splice(index, 1);
+                    }
+                }
+
+                return;
+            }
+        }
+    }
 }
 
 function drawMenu() {
@@ -251,4 +361,61 @@ function drawPins() {
 function drawCandy() {
     imageMode(CENTER);
     image(candyImg, candy.position.x,candy.position.y, 50,50);
+}
+
+function checkWin() {
+    if(!candy) return;
+
+    let d = dist(candy.position.x,candy.position.y, omNom.x,omNom.y);
+    if(d < 80) {
+        playEffect(winSound);
+
+        gameState = "win";
+        World.remove(world, candy);
+        candy = null;
+    }
+}
+
+function checkLose() {
+    if(!candy) return;
+
+    if(candy.position.y > height + 50 || candy.position.x < -100 || candy.position.x > width + 100) {
+        playEffect(breakSound);
+
+        gameState = "lose";
+        World.remove(world, candy);
+        candy = null;
+    }
+}
+
+function drawGameState() {
+    if(gameState === "playing") return;
+
+    imageMode(CORNER);
+    image(backgroundImg, 0,0, width,height);
+    fill(0,0,0,150);
+    rect(0,0, width,height);
+    imageMode(CENTER);
+
+    const starSize = 60;
+    const spacing = 70;
+
+    let startX = width/2 - spacing;
+
+    for(let i = 0; i < 3; i++) {
+        let img = (i < score) ? starFilledImg : starEmptyImg;
+        image(img, starX + i * spacing,170, starSize,starSize);
+    }
+
+    textAlign(CENTER);
+    textSize(40);
+    fill(255);
+    if(gameState == "win") {
+        text("Você ganhou!", width/2,290);
+    }
+    if(gameState == "lose") {
+        text("Você perdeu!", width/2,290);
+    }
+
+    drawEndButtons();
 }
