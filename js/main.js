@@ -278,8 +278,30 @@ function draw() {
     }
 }
 
+function keyPressed() {
+    if(key === "r" || key === "R") {
+        restartLevel();
+    }
+}
+
 function mousePressed() {
-    
+    if(gameState == "win" && currentLevel === 3) {
+        if(mouseX > finalMenuButton.x - finalMenuButton.width/2 && mouseX < finalMenuButton.x + finalMenuButton.width/2 &&
+           mouseY > finalMenuButton.y - finalMenuButton.height/2 && mouseY < finalMenuButton.y + finalMenuButton.height/2) {
+            clearLevel();
+            currentLevel = 1;
+            gameState = "menu";
+
+            return;
+        }
+
+        if(mouseX > finalRetryButton.x - finalRetryButton.width/2 && mouseX < finalRetryButton.x + finalRetryButton.width/2 &&
+           mouseY > finalRetryButton.y - finalRetryButton.height/2 && mouseY < finalRetryButton.y + finalRetryButton.height/2) {
+            restartLevel();
+
+            return;
+        }
+    }
 }
 
 function mouseDragged() {
@@ -418,4 +440,166 @@ function drawGameState() {
     }
 
     drawEndButtons();
+}
+
+function drawStars() {
+    imageMode(CENTER);
+
+    for(let star of stars) {
+        if(star.disappearing) {
+            let frame = floor(star.disappearFrame / starDisappearFrameDelay);
+            if(frame < starDisappearFrames.length) {
+                image(starDisappearFrames[frame], star.x,star.y, 80,80);
+                star.disappearFrame++;
+            } else {
+                star.disappearing = false;
+            }
+
+            continue;
+        }
+
+        push();
+        translate(star.x, star.y);
+
+        let scaleX = abs(cos(star.angle));
+        scale(scaleX, 1);
+
+        image(starImg, 0,0, 40,40);
+        pop();
+
+        star.angle += 0.05;
+    }
+}
+
+function checkStars() {
+    if(!candy) return;
+
+    for(let star of stars) {
+        if(star.disappearing) continue;
+        if(star.collected) continue;
+
+        let d = dist(candy.position.x,candy.position.y, star.x,star.y)
+        if(d < 40) {
+            star.collected = true;
+            star.disappearing = true;
+            star.disappearFrame = 0;
+            score++;
+
+            switch(score) {
+                case 1:
+                    playEffect(star1Sound); 
+                    break;
+
+                case 2: 
+                    playEffect(star2Sound);
+                    break;
+
+                case 3:
+                    playEffect(star3Sound); 
+                    break;
+            }
+        }
+    } 
+}
+
+function drawAudioButtons() {
+    imageMode(CENTER);
+
+    if(musicEnable) {
+        if(dist(mouseX,mouseY, musicButton.x,musicButton.y) < 25) {
+            tint(255, 255);
+        } else {
+            tint(255, 170);
+        }
+    } else {
+        tint(120, 120);
+    }
+    image(bgSoundImg, musicButton.x,musicButton.y, musicButton.size,musicButton.size);
+    noTint();
+
+    if(effectEnable) {
+        if(dist(mouseX,mouseY, effectButton.x,effectButton.y) < 25) {
+            tint(255, 255);
+        } else {
+            tint(255, 170);
+        }
+    } else {
+        tint(120, 120);
+    }
+    image(speakerImg, effectButton.x,effectButton.y, effectButton.size,effectButton.size);
+    noTint();
+
+    if(restartButton) {
+        tint(255);
+    } else {
+        tint(255, 170);
+    }
+    image(restartImg, restartButton.x,restartButton.y, restartButton.size,restartButton.size);
+    noTint();
+
+    if(dist(mouseX,mouseY, pauseButton.x,pauseButton.y) < 25) {
+        tint(255);
+    } else {
+        tint(255, 170);
+    }
+
+    if(paused) {
+        image(playImg, pauseButton.x,pauseButton.y, pauseButton.size,pauseButton.size);
+    } else {
+        image(pauseImg, pauseButton.x,pauseButton.y, pauseButton.size,pauseButton.size);
+    }
+    noTint();
+    strokeWeight(3);
+    stroke(220,40,40);
+
+    const r = 15;
+
+    if(!effectEnable) {
+        line(effectButton.x - r,effectButton.y - r, effectButton.x + r,effectButton.y + r);
+        line(effectButton.x + r,effectButton.y - r, effectButton.x - r,effectButton.y + r);
+    }
+    if(!musicEnable) {
+        line(musicButton.x - r,musicButton.y - r, musicButton.x + r,musicButton.y + r);
+        line(musicButton.x + r,musicButton.y - r, musicButton.x - r,musicButton.y + r);
+    }
+    noStroke();
+}
+
+function restartLevel() {
+    if(candy) {
+        World.remove(world, candy);
+        candy = null;
+    }
+    if(candyCon) {
+        candyCon.detach();
+        candyCon = null;
+    }
+    for(let con of candyCons) {
+        if(con) {
+            con.detach();
+        }
+    }
+    candyCons = [];
+
+    if(rope && rope.body) {
+        Composite.remove(world, rope.body);
+        rope = null;
+    }
+    for(let r of ropes) {
+        if(r && r.body) {
+            Composite.remove(world, r.body);
+        }
+    }
+    ropes = [];
+
+    if(ground && ground.body) {
+        World.remove(world, ground.body);
+        ground = null;
+    }
+
+    stars = [];
+    score = 0;
+    gameState = "playing";
+
+    loadCurrentLevel();
 }
