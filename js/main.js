@@ -302,6 +302,82 @@ function mousePressed() {
             return;
         }
     }
+
+    if(currentLevel === 2 && gameState === "playing") {
+        let d = dist(mouseX,mouseY, candy.position.x,candy.position.y);
+        if(d < 60) {
+            return;
+        }
+    }
+
+    if(gameState === "win" || gameState === "lose") {
+        if(dist(mouseX,mouseY, restartEndButton.x,restartEndButton.y) < restartEndButton.size / 2) {
+            restartLevel();
+
+            return;
+        }
+        if(dist(mouseX,mouseY, homeButton.x,homeButton.y) < homeButton.size / 2) {
+            clearLevel();
+            currentLevel = 1;
+            gameState = "menu";
+
+            return;
+        }
+        if(gameState === "win" && dist(mouseX,mouseY, nextButton.x,nextButton.y) < nextButton.size / 2) {
+            nextLevel();
+
+            return;
+        }
+    }
+
+    if(gameState === "menu") {
+        for(let level of levels) {
+            let d = dist(mouseX,mouseY, level.x, level.y);
+
+            if(d < 90) {
+                if(level.unlocked) {
+                    userStartAudio();
+
+                    if(musicEnable) {
+                        if(!gameMusic.isPlaying()) {
+                            gameMusic.setVolume(0.35);
+                            gameMusic.loop();
+                        }
+                    }
+
+                    currentLevel = level.id;
+                    loadCurrentLevel();
+                    gameState = "playing";
+                }
+
+                return;
+            }
+        }
+    }
+
+    if(dist(mouseX,mouseY, musicButton.x,musicButton.y) < musicButton.size / 2) {
+        toggleMusic();
+        
+        return;
+    }
+
+    if(dist(mouseX,mouseY, effectButton.x,effectButton.y) < effectButton.size / 2) {
+        effectEnable = !effectEnable;
+
+        return;
+    }
+
+    if(dist(mouseX,mouseY, restartButton.x,restartButton.y) < restartButton.size / 2) {
+        restartLevel();
+
+        return;
+    }
+
+    if(dist(mouseX,mouseY, pauseButton.x,pauseButton.y) < pauseButton.size / 2) {
+        paused = !paused;
+
+        return;
+    }
 }
 
 function mouseDragged() {
@@ -395,6 +471,49 @@ function checkWin() {
         gameState = "win";
         World.remove(world, candy);
         candy = null;
+    }
+}
+
+function drawCuts() {
+    noFill();
+
+    for(let i = cuts.length - 1; i >= 0; i--) {
+        let c = cuts[i];
+        let alpha = map(c.life, 0,12,0,255);
+
+        let mx = (c.x1 + c.x2) / 2;
+        let my = (c.y1 + c.y2) / 2;
+
+        let dx = c.x2 - c.x1;
+        let dy = c.y2 - c.y1;
+
+        let px = -dy;
+        let py = dx;
+
+        let len = sqrt(px * py * py);
+        if(len !== 0) {
+            px /= len;
+            py /= len;
+        }
+
+        let curve = 20;
+        
+        mx += px * curve;
+        my += py * curve;
+
+        for(let j = 0; j < 8; j++) {
+            let t = j / 7;
+            let offset = map(t, 0,1,-6,6);
+            let w = 8 - abs(offset);
+
+            stroke(180,230,255,alpha * 0.45);
+            strokeWeight(w + 2);
+            beginShape();
+            curveVertex(c.x1 + px * offset * 0.2, c.y1 + py * offset * 0.2);
+            curveVertex(c.x1 + px * offset * 0.2, c.y1 + py * offset * 0.2);
+
+            curveVertex(mx + px * offset, my + py * offset);
+        }
     }
 }
 
@@ -602,4 +721,27 @@ function restartLevel() {
     gameState = "playing";
 
     loadCurrentLevel();
+}
+
+function toggleMusic() {
+    musicEnable = !musicEnable;
+
+    if(musicEnable) {
+        if(!gameMusic.isPlaying()) {
+            gameMusic.setVolume(0.3);
+            gameMusic.loop();
+        }
+    } else {
+        gameMusic.stop();
+    }
+}
+
+function playEffect(sound) {
+    if(!effectEnable) return;
+
+    if(sound.isPlaying()){
+        sound.stop();
+    }
+
+    sound.play();
 }
