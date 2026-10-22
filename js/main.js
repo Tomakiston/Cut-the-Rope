@@ -340,7 +340,7 @@ function mousePressed() {
 
                     if(musicEnable) {
                         if(!gameMusic.isPlaying()) {
-                            gameMusic.setVolume(0.35);
+                            gameMusic.setVolume(0.2);
                             gameMusic.loop();
                         }
                     }
@@ -508,13 +508,35 @@ function drawCuts() {
 
             stroke(180,230,255,alpha * 0.45);
             strokeWeight(w + 2);
+
             beginShape();
             curveVertex(c.x1 + px * offset * 0.2, c.y1 + py * offset * 0.2);
             curveVertex(c.x1 + px * offset * 0.2, c.y1 + py * offset * 0.2);
-
             curveVertex(mx + px * offset, my + py * offset);
+            curveVertex(c.x2 + px * offset * 0.2, c.y2 + py * offset * 0.2);
+            curveVertex(c.x2 + px * offset * 0.2, c.y2 + py * offset * 0.2);
+            endShape();
+
+            stroke(255, alpha);
+            strokeWeight(3);
+
+            beginShape();
+            curveVertex(c.x1, c.y1);
+            curveVertex(c.x1, c.y1);
+            curveVertex(mx, my);
+            curveVertex(c.x2, c.y2);
+            curveVertex(c.x2, c.y2);
+            endShape();
+        }
+
+        c.life--;
+
+        if(c.life <= 0) {
+            cuts.splice(5, 1);
         }
     }
+
+    noStroke();
 }
 
 function checkLose() {
@@ -621,6 +643,23 @@ function checkStars() {
     } 
 }
 
+function drawStarScore() {
+    imageMode(CENTER);
+
+    const starSize = 40;
+    const spacing = 50;
+    const starX = width / 2 - spacing;
+    const starY = 40;
+
+    for(let i = 0; i < 3; i++) {
+        if(i < score) {
+            image(starFilledImg, starX + 1 * spacing,starY, starSize,starSize);
+        } else {
+            image(starEmptyImg, starX + 1 * spacing,starY, starSize,starSize);
+        }
+    }
+}
+
 function drawAudioButtons() {
     imageMode(CENTER);
 
@@ -684,6 +723,36 @@ function drawAudioButtons() {
     noStroke();
 }
 
+function drawEndButtons() {
+    imageMode(CENTER);
+
+    drawButton(restartImg, restartEndButton);
+    drawButton(homeImg, homeButton);
+
+    if(gameState === "win") {
+        drawButton(nextImg, nextButton);
+    }
+}
+
+function drawButton(img, button) {
+    let hover = dist(mouseX,mouseY, button.x,button.y) < button.size / 2;
+
+    push();
+    translate(button.x, button.y);
+
+    if(hover) {
+        scale(1.12);
+        tint(255);
+    } else {
+        tint(255, 210);
+    }
+
+    image(img, 0,0, button.size, button.size);
+    pop();
+
+    noTint();
+}
+
 function restartLevel() {
     if(candy) {
         World.remove(world, candy);
@@ -728,7 +797,7 @@ function toggleMusic() {
 
     if(musicEnable) {
         if(!gameMusic.isPlaying()) {
-            gameMusic.setVolume(0.3);
+            gameMusic.setVolume(0.2);
             gameMusic.loop();
         }
     } else {
@@ -744,4 +813,49 @@ function playEffect(sound) {
     }
 
     sound.play();
+}
+
+function clearLevel() {
+    if(candy) {
+        World.remove(world, candy);
+        candy = null;
+    }
+
+    if(candyCon) {
+        candyCon.detach();
+        candyCon = null;
+    }
+
+    for(let con of candyCons) {
+        if(con) {
+            con.detach();
+        }
+    }
+    candyCons = [];
+
+    if(rope && rope.body) {
+        Composite.remove(world, rope.body);
+        rope = null;
+    }
+
+    for(let r of ropes) {
+        if(r && r.body) {
+            Composite.remove(world, r.body);
+        }
+    }
+    ropes = [];
+
+    if(ground && ground.body) {
+        World.remove(world, ground.body);
+        ground = null;
+    }
+
+    stars = [];
+    score = 0;
+}
+
+function loadCurrentLevel() {
+    if(currentLevel === 1) {
+        loadLevel1();
+    }
 }
