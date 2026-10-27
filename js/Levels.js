@@ -17,6 +17,40 @@ function drawOmNom() {
     image(omNomFrames[currentFrame], omNom.x,omNom.y, omNom.size,omNom.size);
 }
 
+function drawOmNom2() {
+    omNom = {x:515, y:60, size:160};
+
+    if(frameCount % frameDelay === 0) {
+        currentFrame++;
+
+        if(currentFrame >= omNomFrames.length) {
+            currentFrame = 0;
+        }
+    }
+
+    //imageMode(CENTER);
+    image(supportImg, 515,100, 160,160);
+
+    image(omNomFrames[currentFrame], omNom.x,omNom.y, omNom.size,omNom.size);
+}
+
+function drawOmNom3() {
+    omNom = {x:635, y:670, size:160};
+
+    if(frameCount % frameDelay === 0) {
+        currentFrame++;
+
+        if(currentFrame >= omNomFrames.length) {
+            currentFrame = 0;
+        }
+    }
+
+    //imageMode(CENTER);
+    image(supportImg, 635,720, 160,160);
+
+    image(omNomFrames[currentFrame], omNom.x,omNom.y, omNom.size,omNom.size);
+}
+
 function loadLevel1() {
     score = 0;
     pins = [];
@@ -70,4 +104,27 @@ function loadLevel1() {
     drawOmNom();
 
     gameState = "playing";
+}
+
+function loadLevel2() {
+    score = 0;
+    pins = [];
+    stars = [];
+    ropes = [];
+    candyCons = [];
+
+    bubblePopped = false;
+    bubbleActive = false;
+
+    const topPin = {x:520, y:200, size:40};
+    const rightPin = {x:640, y:480, size:40};
+    const leftPin = {x:362, y:610, size:40};
+
+    pins.push(topPin);
+    pins.push(rightPin);
+    pins.push(leftPin);
+}
+
+function loadLevel3() {
+
 }

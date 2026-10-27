@@ -229,7 +229,7 @@ function draw() {
         rope.display();
     }
 
-    for(r of ropes) {
+    for(let r of ropes) {
         r.display();
     }
 
@@ -237,7 +237,7 @@ function draw() {
 
     imageMode(CENTER);
 
-    if(gameState = "playing") {
+    if(gameState == "playing") {
         if(currentLevel === 1) {
             drawOnNom();
         }
@@ -259,6 +259,10 @@ function draw() {
 
     drawStarScore();
     drawGameState();
+
+    if(!(gameState == "win" && currentLevel === 3)) {
+        drawAudioButtons();
+    }
 
     if(candyCon && candyCon.link && candyCon.link.bodyA && candy) {
         stroke(255);
@@ -857,5 +861,30 @@ function clearLevel() {
 function loadCurrentLevel() {
     if(currentLevel === 1) {
         loadLevel1();
+    } 
+    else if(currentLevel === 2) {
+        loadLevel2();
     }
+    else if(currentLevel === 3) {
+        loadLevel3();
+    }
+}
+
+function nextLevel() {
+    if(currentLevel >= 3) return;
+
+    clearLevel();
+    currentLevel++;
+
+    if(currentLevel === 2) {
+        levels[1].unlocked = true;
+        levels[1].img = level2Img;
+    }
+    if(currentLevel === 3) {
+        levels[2].unlocked = true;
+        levels[2].img = level3Img;
+    }
+
+    loadCurrentLevel();
+    gameState = "playing";
 }
