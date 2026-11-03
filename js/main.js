@@ -214,6 +214,9 @@ function draw() {
         Engine.update(engine, deltaTime);
     }
 
+    checkBubble();
+    updateBubble();
+
     if(gameState === "menu") {
         drawMenu();
         return;
@@ -221,6 +224,8 @@ function draw() {
 
     drawStars();
     drawPins();
+    drawBlowers();
+    updateBlower();
 
     if(ground) {
         ground.display();
@@ -253,6 +258,8 @@ function draw() {
         drawCandy();
     }
 
+    drawBubble();
+
     checkStars();
     checkWin();
     checkLose();
@@ -268,6 +275,7 @@ function draw() {
         stroke(255);
         line(candyCon.link.bodyA.position.x,candyCon.link.bodyA.position.y, candy.position.x,candy.position.y);
     }
+
     if(paused) {
         fill(0,180);
         rect(0,0, width,height);
@@ -307,9 +315,10 @@ function mousePressed() {
         }
     }
 
-    if(currentLevel === 2 && gameState === "playing") {
+    if(currentLevel === 2 && gameState === "playing" && bubbleActive && candy) {
         let d = dist(mouseX,mouseY, candy.position.x,candy.position.y);
         if(d < 60) {
+            popBubble();
             return;
         }
     }
@@ -354,6 +363,17 @@ function mousePressed() {
                     gameState = "playing";
                 }
 
+                return;
+            }
+        }
+    }
+
+    if(currentLevel === 3 && gameState === "playing" && !paused) {
+        for(let blower of blowers) {
+            let d = dist(mouseX,mouseY, blower.x,blower.y);
+
+            if(d < blower.size / 2) {
+                activeBlower(blower);
                 return;
             }
         }
@@ -558,6 +578,14 @@ function checkLose() {
 function drawGameState() {
     if(gameState === "playing") return;
 
+    if(gameState == "win" && currentLevel === 3) {
+        imageMode(CORNER);
+        image(bgVictoryImg, 0,0, width,height);
+
+        drawFinalVictoryButtons();
+        return;
+    }
+
     imageMode(CORNER);
     image(backgroundImg, 0,0, width,height);
     fill(0,0,0,150);
@@ -567,7 +595,7 @@ function drawGameState() {
     const starSize = 60;
     const spacing = 70;
 
-    let startX = width/2 - spacing;
+    //let startX = width/2 - spacing;
 
     for(let i = 0; i < 3; i++) {
         let img = (i < score) ? starFilledImg : starEmptyImg;
@@ -577,6 +605,7 @@ function drawGameState() {
     textAlign(CENTER);
     textSize(40);
     fill(255);
+
     if(gameState == "win") {
         text("Você ganhou!", width/2,290);
     }
@@ -602,6 +631,12 @@ function drawStars() {
 
             continue;
         }
+
+        if(star.collected) continue;
+
+        if(currentLevel === 2 && star.x === 490 && star.y === 650) {
+            image(bubbleImg, star.x,star.y, 80,80);
+        } 
 
         push();
         translate(star.x, star.y);
@@ -758,6 +793,9 @@ function drawButton(img, button) {
 }
 
 function restartLevel() {
+    bubblePopped = false;
+    bubbleActive = false;
+
     if(candy) {
         World.remove(world, candy);
         candy = null;
@@ -820,6 +858,9 @@ function playEffect(sound) {
 }
 
 function clearLevel() {
+    bubblePopped = false;
+    bubbleActive = false;
+
     if(candy) {
         World.remove(world, candy);
         candy = null;
@@ -887,4 +928,28 @@ function nextLevel() {
 
     loadCurrentLevel();
     gameState = "playing";
+}
+
+function checkBubble() {
+    if(currentLevel !== 2) return;
+    if(!candy) return;
+    if(bubbleActive) return;
+    if(bubblePopped) return;
+
+    const bubbleX = 490;
+    const bubbleY = 650;
+
+    let d = dist(candy.position.x,candy.position.y, bubbleX, bubbleY);
+    if(d < 45) {
+        bubbleActive = true;
+        bubblePopped = false;
+    }
+}
+
+function drawBubble() {
+    if(!bubbleActive) return;
+    if(!candy) return;
+    
+    imageMode(CENTER);
+    image(bubbleImg, candy.position.x,candy.position.y, 80,80);
 }
