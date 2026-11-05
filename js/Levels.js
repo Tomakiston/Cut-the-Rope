@@ -11,7 +11,7 @@ function drawOmNom() {
         }
     }
 
-    imageMode(CENTER);
+    //imageMode(CENTER);
     image(supportImg, 514,620, 160,160);
 
     image(omNomFrames[currentFrame], omNom.x,omNom.y, omNom.size,omNom.size);
@@ -196,7 +196,7 @@ function loadLevel3() {
     let ropeTop = new Rope(6, {x:topPin.x, y:topPin.y});
     ropes.push(ropeTop);
 
-    ground = new Ground(width/2, height+500, width,20);
+    ground = new Ground(width/2, height+500,width, 20);
 
     candy = Bodies.circle(width/2, 250, 25, {
             density: 0.0002,
@@ -207,6 +207,8 @@ function loadLevel3() {
     World.add(world, candy);
 
     let conTop = new Link(ropeTop, candy);
+
+    candyCons.push(conTop);
 
     blowers = [];
     blowers.push({
@@ -329,7 +331,7 @@ function updateBlower() {
 
     for(let blower of blowers) {
         if(blower.active) {
-            Matter.Body.applyForce(candy, candy.position, {x:blower.directionX * 0.015, y:blower.directionY * 0.015});
+            Matter.Body.applyForce(candy, candy.position, {x:blower.directionX * 0.0015, y:blower.directionY * 0.0015});
         }
     }
 }

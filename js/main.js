@@ -158,7 +158,7 @@ function preload() {
     level1Img = loadImage("images/lvl-1.png");
     level2Img = loadImage("images/lvl-2.png");
     level3Img = loadImage("images/lvl-3.png");
-    levelBlockedImgImg = loadImage("images/lvl-blocked.png");
+    levelBlockedImg = loadImage("images/lvl-blocked.png");
 
     bgVictoryImg = loadImage("images/bg-vitoria.png");
     btnMenuImg = loadImage("images/btn-menu.png");
@@ -244,13 +244,13 @@ function draw() {
 
     if(gameState == "playing") {
         if(currentLevel === 1) {
-            drawOnNom();
+            drawOmNom();
         }
         else if(currentLevel === 2) {
-            drawOnNom2();
+            drawOmNom2();
         }
         else if(currentLevel === 3) {
-            drawOnNom3();
+            drawOmNom3();
         }
     }
 
@@ -595,7 +595,7 @@ function drawGameState() {
     const starSize = 60;
     const spacing = 70;
 
-    //let startX = width/2 - spacing;
+    let starX = width/2 - spacing;
 
     for(let i = 0; i < 3; i++) {
         let img = (i < score) ? starFilledImg : starEmptyImg;
