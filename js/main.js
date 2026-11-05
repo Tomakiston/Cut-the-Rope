@@ -953,3 +953,30 @@ function drawBubble() {
     imageMode(CENTER);
     image(bubbleImg, candy.position.x,candy.position.y, 80,80);
 }
+
+function popBubble() {
+    if(!bubbleActive) return;
+    if(!candy) return;
+
+    bubbleActive = false;
+    bubblePopped = true;
+
+    Matter.Body.setVelocity(candy, {x:candy.velocity.x, y:0});
+    Matter.Body.setStatic(candy, false);
+}
+
+function updateBubble() {
+    if(!bubbleActive) return;
+    if(!candy) return;
+
+    Matter.Body.setVelocity(candy, {x:candy.velocity.x, y:-4});
+}
+
+function drawFinalVictoryButtons() {
+    imageMode(CENTER);
+    image(btnMenuImg, finalMenuButton.x,finalMenuButton.y, finalMenuButton.width,finalMenuButton.height);
+    pop();
+
+    image(btnTryAgainImg, finalRetryButton.x,finalRetryButton.y, finalRetryButton.width,finalRetryButton.height);
+    pop();
+}
