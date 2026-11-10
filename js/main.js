@@ -200,8 +200,8 @@ function setup() {
     homeButton = {x:width/2, y:430, size:70};
     nextButton = {x:width/2 + 80, y:430, size:70};
 
-    finalMenuButton = {x:240, y:655, width:245, height:120};
-    finalRetryButton = {x:795, y:655, width:245, height:120};
+    finalMenuButton = {x:240, y:585, width:245, height:120};
+    finalRetryButton = {x:795, y:585, width:245, height:120};
 }
 
 function draw() {
@@ -482,7 +482,7 @@ function drawPins() {
 
 function drawCandy() {
     imageMode(CENTER);
-    image(candyImg, candy.position.x,candy.position.y, 50,50);
+    image(candyImg, candy.position.x,candy.position.y, 60,60);
 }
 
 function checkWin() {
@@ -685,16 +685,16 @@ function checkStars() {
 function drawStarScore() {
     imageMode(CENTER);
 
-    const starSize = 40;
+    const starSize = 50;
     const spacing = 50;
     const starX = width / 2 - spacing;
-    const starY = 40;
+    const starY = 25;
 
     for(let i = 0; i < 3; i++) {
         if(i < score) {
-            image(starFilledImg, starX + 1 * spacing,starY, starSize,starSize);
+            image(starFilledImg, starX + i * spacing,starY, starSize,starSize);
         } else {
-            image(starEmptyImg, starX + 1 * spacing,starY, starSize,starSize);
+            image(starEmptyImg, starX + i * spacing,starY, starSize,starSize);
         }
     }
 }

@@ -18,7 +18,7 @@ function drawOmNom() {
 }
 
 function drawOmNom2() {
-    omNom = {x:515, y:60, size:160};
+    omNom = {x:514, y:50, size:160};
 
     if(frameCount % frameDelay === 0) {
         currentFrame++;
@@ -35,7 +35,7 @@ function drawOmNom2() {
 }
 
 function drawOmNom3() {
-    omNom = {x:635, y:670, size:160};
+    omNom = {x:635, y:600, size:160};
 
     if(frameCount % frameDelay === 0) {
         currentFrame++;
@@ -46,7 +46,7 @@ function drawOmNom3() {
     }
 
     //imageMode(CENTER);
-    image(supportImg, 635,720, 160,160);
+    image(supportImg, 635,650, 160,160);
 
     image(omNomFrames[currentFrame], omNom.x,omNom.y, omNom.size,omNom.size);
 }
@@ -55,11 +55,11 @@ function loadLevel1() {
     score = 0;
     pins = [];
 
-    rope = new Rope(5, {x: width/2, y: 60});
+    rope = new Rope(4, {x: width/2, y: 50});
 
     pins.push({
         x: width / 2,
-        y: 70,
+        y: 60,
         size: 40
     });
 
@@ -78,7 +78,7 @@ function loadLevel1() {
     stars = [];
     stars.push({
         x: 510,
-        y: 350,
+        y: 300,
         collected: false,
         angle: 0,
         disappearing: false,
@@ -86,7 +86,7 @@ function loadLevel1() {
     });
     stars.push({
         x: 510,
-        y: 450,
+        y: 400,
         collected: false,
         angle: 0,
         disappearing: false,
@@ -94,7 +94,7 @@ function loadLevel1() {
     });
     stars.push({
         x: 510,
-        y: 550,
+        y: 500,
         collected: false,
         angle: 0,
         disappearing: false,
@@ -214,7 +214,7 @@ function loadLevel3() {
     blowers.push({
         x: 335,
         y: 345,
-        size: 60,
+        size: 80,
         directionX: 0.5,
         directionY: 0,
         active: false,
@@ -224,7 +224,7 @@ function loadLevel3() {
     blowers.push({
         x: 655,
         y: 345,
-        size: 60,
+        size: 80,
         directionX: -0.5,
         directionY: 0,
         active: false,
@@ -234,7 +234,7 @@ function loadLevel3() {
     blowers.push({
         x: width / 2,
         y: 505,
-        size: 70,
+        size: 80,
         directionX: 0,
         directionY: -0.5,
         active: false,
